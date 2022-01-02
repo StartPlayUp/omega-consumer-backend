@@ -60,6 +60,8 @@
     "eslint-config-next": "^11.1.2",
     "jslint": "^0.12.1",
     "nodemon": "^2.0.14",
+    "swagger-jsdoc": "^6.1.0",
+    "swagger-ui-express": "^4.3.0",
     "ts-jest": "^27.0.7",
     "ts-node": "^10.4.0",
     "typescript": "4.4.4"

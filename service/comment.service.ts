@@ -49,10 +49,13 @@ const createMemberComment = async (commentData: IMemberComment): Promise<returnC
         await comment.save()
         return {
             success: true,
+            data: null,
+            error: null,
         }
     } catch (err) {
         return {
             success: false,
+            data: null,
             error: "send comment error"
         }
     }
@@ -96,10 +99,13 @@ const createNonMemberComment = async (commentData: INonMemberComment): Promise<r
         await comment.save()
         return {
             success: true,
+            data: null,
+            error: null,
         }
     } catch (err) {
         return {
             success: false,
+            data: null,
             error: "createNonMemberComment error"
         }
     }
@@ -125,17 +131,21 @@ const deleteMemberCommentFromUuid = async (data: any) => {
         if (UpdateResult.affected) {
             return {
                 success: true,
+                data: null,
+                error: null,
             }
         }
         else {
             return {
                 success: false,
+                data: null,
                 error: "업데이트 실패"
             }
         }
     } catch (err) {
         return {
             success: false,
+            data: null,
             error: "createNonMemberComment server error"
         }
     }
@@ -155,10 +165,13 @@ const deleteNonMemberCommentFromUuid = async (data: any) => {
         Comment.save(commentFromUuid);
         return {
             success: true,
+            data: null,
+            error: null,
         }
     } catch (err) {
         return {
             success: false,
+            data: null,
             error: "createNonMemberComment error"
         }
     }
@@ -239,12 +252,16 @@ const getCommentsFromPostUuid = async ({ postUuid }: any): Promise<returnComment
 
         return {
             success: true,
-            comment: Object.values(temp)
+            data: {
+                comments: Object.values(temp)
+            },
+            error: null,
         }
     } catch (err) {
         return {
             success: false,
-            error: "Something went wrong"
+            data: null,
+            error: "get Comments error"
         }
     }
 }

@@ -3,6 +3,7 @@ import { ILoginUser, IReadUser, IUser, returnUser } from '../types/service/Inter
 import { User } from '../typeorm/entity/User';
 import bcrypt from 'bcrypt';
 import { sanitizeUser } from '../utilities/apiUtilities';
+import { returnApi } from '../types/service/Model/InterfaceReturnApiModel';
 
 const createUser = async (userData: IUser): Promise<returnUser> => {
     const { id, nickname, email, password, emailToken, isVerified } = userData;
@@ -24,11 +25,14 @@ const createUser = async (userData: IUser): Promise<returnUser> => {
         await user.save()
         return {
             success: true,
+            data: null,
+            error: null,
         }
     } catch (err) {
         return {
             success: false,
-            error: "Something went wrong"
+            data: null,
+            error: "로그인 실패"
         }
     }
 }
@@ -44,11 +48,14 @@ const deleteUser = async (userData: IUser | any): Promise<returnUser> => {
         await user.save()
         return {
             success: true,
+            data: null,
+            error: null,
         }
     } catch (err) {
         return {
             success: false,
-            error: "Something went wrong"
+            data: null,
+            error: "회원탈퇴 실패"
         }
     }
 }
@@ -92,28 +99,34 @@ const updateUser = async (user: IUser | any): Promise<returnUser> => {
         await User.update({ id }, { emailToken, email, isVerified: false })
         return {
             success: true,
+            data: null,
+            error: null,
         }
     } catch (err) {
         return {
             success: false,
+            data: null,
+            error: null,
         }
     }
 }
 
 
-const getUserFromId = async (userData: IReadUser): Promise<returnUser> => {
+const getUserFromId = async (userData: IReadUser): Promise<returnApi> => {
     const { id } = userData;
     try {
         const user = await User.findOneOrFail({ id });
         const sanitizeUserData = await sanitizeUser(user);
         return {
             success: true,
-            user: sanitizeUserData
+            data: { user: sanitizeUserData },
+            error: null,
         }
     } catch (err) {
         return {
             success: false,
-            error: "Something went wrong"
+            data: null,
+            error: "getUser 에러"
         }
     }
 }
@@ -126,13 +139,17 @@ const loginCheckUser = async (userData: ILoginUser): Promise<returnUser> => {
         if (!match) throw "비밀번호가 일치하지 않습니다."
         return {
             success: true,
-            user: {
-                nickname: user.nickname
-            }
+            data: {
+                user: {
+                    nickname: user.nickname
+                }
+            },
+            error: null,
         }
     } catch (error: any) {
         return {
             success: false,
+            data: null,
             error
         }
     }
@@ -146,11 +163,15 @@ const verifyEmailUser = async ({ emailToken }: { emailToken: string }): Promise<
         user.isVerified = true;
         await user.save();
         return {
-            success: true
+            success: true,
+            data: null,
+            error: null,
         }
     } catch (error) {
         return {
-            success: false
+            success: false,
+            data: null,
+            error: "이메일 인증 실패",
         }
     }
 }
@@ -162,18 +183,22 @@ const checkEmailVerifyFromId = async ({ id }: { id: string }): Promise<returnUse
         console.log("user : ", user)
         if (user.isVerified) {
             return {
-                success: true
+                success: true,
+                data: null,
+                error: null,
             }
         }
         else {
             return {
                 success: false,
+                data: null,
                 error: "이메일 인증을 받아야 합니다."
             }
         }
     } catch (error) {
         return {
             success: false,
+            data: null,
             error: "아이디가 없습니다."
         }
     }

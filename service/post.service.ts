@@ -14,7 +14,6 @@ const likeItPost = async (likeItData: ILikeIt): Promise<returnPostLikeIt> => {
         const post = await Post.findOneOrFail({ uuid: postUuid })
         const user = await User.findOneOrFail({ uuid: userUuid })
         const thumbFindOne = await Thumb.findOne({ post, user })
-        let message = ""
         if (thumbFindOne) {
             thumbFindOne.remove()
         }
@@ -30,12 +29,14 @@ const likeItPost = async (likeItData: ILikeIt): Promise<returnPostLikeIt> => {
         }
         return {
             success: true,
-            message
+            data: null,
+            error: null,
         }
     } catch (err) {
         return {
             success: false,
-            error: "Something went wrong"
+            data: null,
+            error: "좋아요 실패"
         }
     }
 }
@@ -59,13 +60,17 @@ const getLikeItPost = async (likeItData: { postUuid: string }): Promise<returnGe
         }
         return {
             success: true,
-            likeItCount,
-            countAll
+            data: {
+                likeItCount,
+                countAll
+            },
+            error: null,
         }
     } catch (err) {
         return {
             success: false,
-            error: "Something went wrong"
+            data: null,
+            error: "좋아요 가져오기 실패"
         }
     }
 }
@@ -90,12 +95,15 @@ const createPost = async (postData: IPost): Promise<returnPost> => {
         await post.save()
         return {
             success: true,
+            data: null,
+            error: null,
         }
     } catch (err) {
         console.log(err)
         return {
             success: false,
-            error: "Something went wrong"
+            data: null,
+            error: "포스트 생성 실패"
         }
     }
 }
@@ -129,13 +137,17 @@ const getPostFromUuid = async ({ postUuid }: { postUuid: string }): Promise<retu
 
         return {
             success: true,
-            post
+            data: {
+                post
+            },
+            error: null,
         }
     } catch (err) {
         console.error(err)
         return {
             success: false,
-            error: "Something went wrong"
+            data: null,
+            error: "포스트 가져오기 실패"
         }
     }
 }
@@ -158,12 +170,16 @@ const getPostsWithoutNoticeBoardByTime = async ({ limit = "150" }: { limit: stri
         console.log(posts)
         return {
             success: true,
-            posts
+            data: {
+                posts
+            },
+            error: null,
         }
     } catch (err) {
         console.error(err)
         return {
             success: false,
+            data: null,
             error: "getPostsWithoutNoticeBoardByTime db error"
         }
     }
@@ -183,14 +199,17 @@ const getPostsSortByTime = async ({ limit = "150" }: { limit: string }): Promise
         console.log(posts)
         return {
             success: true,
-            posts,
+            data: {
+                posts,
+            },
             error: null,
         }
     } catch (err) {
         console.error(err)
         return {
             success: false,
-            error: "Something went wrong"
+            data: null,
+            error: "포스트 여러개 가져오기 실패"
         }
     }
 }
@@ -223,13 +242,17 @@ const getPostsPagenationSortByTime = async ({ category, page = 0, pageSize = 15 
         }
         return {
             success: true,
-            posts
+            data: {
+                posts
+            },
+            error: null,
         }
     } catch (err) {
         console.error(err)
         return {
             success: false,
-            error: "Something went wrong"
+            data: null,
+            error: "포스트 여러개 페이지네이션 형식으로 가져오기 실패"
         }
     }
 }
@@ -248,13 +271,17 @@ const getCategoryPostsSortByTime = async ({ category, limit = "1500" }: { catego
             .getRawMany();
         return {
             success: true,
-            posts
+            data: {
+                posts
+            },
+            error: null,
         }
     } catch (err) {
         console.error(err)
         return {
             success: false,
-            error: "Something went wrong"
+            data: null,
+            error: "카테고리 별로 포스트들 가져오기 실패"
         }
     }
 }
